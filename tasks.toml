@@ -1,0 +1,61 @@
+# ref: https://mise.jdx.dev/tasks/
+#:schema https://mise.jdx.dev/schema/mise-task.json
+
+[check]
+depends = ["check:*"]
+description = "Run all linters and formatters. Set LINT=true to check formatting without applying it."
+
+["check:tflint"]
+run = "tflint {% if env.LINT is undefined %}--fix{% endif %} --recursive"
+dir = "terraform"
+description = "Run tflint to check Terraform configurations."
+
+["check:terraform-fmt"]
+run = "terraform fmt {% if env.LINT is undefined %}-check{% endif %} -recursive"
+dir = "terraform"
+description = "Run terraform fmt to format Terraform configurations."
+
+["check:terraform-validate"]
+run = "terraform validate"
+dir = "terraform"
+description = "Run terraform validate to validate Terraform configurations."
+
+["check:actionlint"]
+run = "actionlint -color"
+# SC2312: check-extra-masked-returns
+# pipefail is set by shell: bash in GitHub Actions but cannot be detected by shellcheck
+# ref: https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#defaultsrunshell
+env.SHELLCHECK_OPTS = "--enable=all --exclude=SC2312"
+description = "Run actionlint to check GitHub Actions workflows."
+
+["check:ghalint"]
+wait_for = ["check:pinact"]
+run = "ghalint run"
+description = "Run ghalint to check GitHub Actions workflows."
+
+["check:pinact"]
+run = "pinact run --verify {% if env.LINT is defined %}--check{% endif %}"
+description = "Run pinact to pin/check pinned GitHub Actions dependencies in workflows."
+
+["check:zizmor"]
+run = "zizmor --pedantic {% if env.LINT is undefined %}--fix{% endif %} ."
+env.GH_TOKEN = "{{ env.GITHUB_TOKEN }}"
+description = "Run Zizmor to check GitHub Actions workflows."
+
+["check:yamlfmt"]
+run = "yamlfmt {% if env.LINT is defined %}-lint{% endif %} ."
+description = "Run yamlfmt to format YAML files."
+
+["check:yamllint"]
+run = "yamllint --strict ."
+description = "Run yamllint to lint YAML files."
+
+# ["check:typos"]
+# run = "typos {% if env.LINT is undefined %}--write-changes{% endif %}"
+# description = "Run typos to check typo in files."
+
+[cf-terraforming]
+dir = "terraform"
+env = { CLOUDFLARE_API_TOKEN = { required = true } }
+run = "cf-terraforming generate --terraform-binary-path $(which terraform)"
+description = "Generate Terraform configurations from Cloudflare resources."

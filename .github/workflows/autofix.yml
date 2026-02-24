@@ -1,0 +1,66 @@
+# name must be autofix.ci for security reasons
+# ref: https://autofix.ci/security
+name: autofix.ci
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  autofix:
+    name: Autofix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read # for checkout
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install mise
+        uses: jdx/mise-action@6d1e696aa24c1aa1bcc1adea0212707c71ab78a8 # v3.6.1
+        with:
+          version: 2026.2.16
+
+      - name: Run autofix
+        run: mise run check --continue-on-error
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: autofix.ci
+        uses: autofix-ci/action@7a166d7532b277f34e16238930461bf77f9d7ed8 # v1.3.3
+        with:
+          commit-message: "style: apply automated fixes"
+          # disable fail-fast to avoid notifications of canceled workflows
+          fail-fast: false
+
+  actions-timeline:
+    name: Generate Actions Timeline
+    needs:
+      - autofix
+    if: ${{ !cancelled() }}
+
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: read # required by Kesin11/actions-timeline
+
+    steps:
+      - name: actions-timeline
+        uses: Kesin11/actions-timeline@e018cfefea60b4f44266998551211a35a58b8097 # v3.0.0

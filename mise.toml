@@ -1,0 +1,45 @@
+# ref: https://mise.jdx.dev/configuration.html
+#:schema https://mise.jdx.dev/schema/mise.json
+
+[tools]
+actionlint = "1.7.11"
+# used in actionlint
+shellcheck = "0.11.0"
+ghalint = "1.5.5"
+pinact = "3.9.0"
+zizmor = "1.22.0"
+yamlfmt = "0.21.0"
+# required for pipx backend
+uv = "0.10.4"
+yamllint = "1.38.0"
+typos = "1.43.5"
+terraform = "1.14.5"
+tflint = "0.61.0"
+"github:cloudflare/cf-terraforming" = "0.24.0"
+kubeseal = "0.35.0"
+
+[settings]
+experimental = true
+
+[task_config]
+includes = ["tasks.toml"]
+
+[prepare.terraform]
+auto = true
+dir = "terraform"
+sources = [
+  "terraform/**/*.tf",
+  "terraform/**/*.tfvars",
+  "terraform/.terraform.lock.hcl",
+]
+outputs = ["terraform/.terraform/", "terraform/.terraform.lock.hcl"]
+run = "terraform init -backend=false -input=false"
+description = "Initialize Terraform locally."
+
+# No tflint plugins are required
+# [prepare.tflint]
+# dir = "terraform"
+# sources = [".tflint.hcl"]
+# outputs = [".tflint.d/"]
+# run = "tflint --init"
+# description = "Initialize tflint plugins."
