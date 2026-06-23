@@ -1,0 +1,14 @@
+machine:
+  network:
+    nameservers:
+      - 1.1.1.1
+      - 1.0.0.1
+  sysctls:
+    net.bridge.bridge-nf-call-iptables: "1"
+    net.ipv4.ip_forward: "1"
+cluster:
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true

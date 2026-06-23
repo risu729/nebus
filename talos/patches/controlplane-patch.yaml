@@ -1,0 +1,17 @@
+machine:
+  network:
+    nameservers:
+      - 1.1.1.1
+      - 1.0.0.1
+  install:
+    extensions:
+      - image: ghcr.io/siderolabs/cloudflared:latest
+  sysctls:
+    net.bridge.bridge-nf-call-iptables: "1"
+    net.ipv4.ip_forward: "1"
+cluster:
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true

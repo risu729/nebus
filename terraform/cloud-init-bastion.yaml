@@ -1,0 +1,15 @@
+# cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - wget
+
+runcmd:
+  # Download and install cloudflared
+  - curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+  - dpkg -i cloudflared.deb
+
+  # Install the cloudflared service using the injected token
+  - cloudflared service install ${cloudflare_token}
