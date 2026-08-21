@@ -16,7 +16,7 @@ typos = "1.43.5"
 terraform = "1.14.5"
 tflint = "0.61.0"
 "github:cloudflare/cf-terraforming" = "0.24.0"
-kubeseal = "0.35.0"
+kubeseal = "0.39.1"
 
 [settings]
 experimental = true
