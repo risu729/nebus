@@ -12,7 +12,7 @@ yamlfmt = "0.21.0"
 # required for pipx backend
 uv = "0.10.4"
 yamllint = "1.38.0"
-typos = "1.43.5"
+typos = "1.50.0"
 terraform = "1.14.5"
 tflint = "0.61.0"
 "github:cloudflare/cf-terraforming" = "0.24.0"
