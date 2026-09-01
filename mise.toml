@@ -10,7 +10,7 @@ pinact = "3.9.0"
 zizmor = "1.22.0"
 yamlfmt = "0.21.0"
 # required for pipx backend
-uv = "0.10.4"
+uv = "0.12.8"
 yamllint = "1.38.0"
 typos = "1.43.5"
 terraform = "1.14.5"
