@@ -24,7 +24,7 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     permissions:
       contents: read # for checkout
@@ -52,7 +52,7 @@ jobs:
       - lint
     if: ${{ !cancelled() }}
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 5
     permissions:
       actions: read # required by Kesin11/actions-timeline
