@@ -59,4 +59,4 @@ jobs:
 
     steps:
       - name: actions-timeline
-        uses: Kesin11/actions-timeline@e018cfefea60b4f44266998551211a35a58b8097 # v3.0.0
+        uses: Kesin11/actions-timeline@460b1f8a750077029ad3589824d371b200e91dcf # v3.2.1
